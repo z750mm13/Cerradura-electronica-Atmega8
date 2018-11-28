@@ -1,60 +1,64 @@
 int main() {
-// Configuracion de entradas y salidas
-DDRB = 0b00001111; // Salidas: AM, PM, Zumbador y 2 puntos
-DDRC = 0xFF; // Salida a los 7 segmentos
-DDRD = 0xF0; // Botones e interruptor y salidas a
-//transistores
-PORTD = 0x0F; // Pull-Up en las entradas
-//Configuracion del temporizador 2
-TCCR2 = 0x04; // Para que desborde cada medio segundo
-TIMSK = 0x40; // Interrupcion por desbordamiento
-ASSR = 0x08; // Se usa al oscilador externo
-sei(); // Habilitador global de interrupciones
-// Configura interrupciones externas
-MCUCR = 0B00001010; // INT1/INT0 por flanco de bajada (sin
-// habilitar)
-// Estado inicial del sistema: variables, banderas y salidas
-h_act = 12; m_act = 0; s_act = 0; // La hora actual inicia con 12:00
-h_alrm = 12; m_alrm = 0; // La hora de la alarma es 12:00
-modo = 1; // Modo normal, muestra la hora
-AM_F = 1; AM_F_A = 1; // Antes del medio doa
-ALARM = 0; CAMBIO = 0; // Alarma apagada
-PORTB = 0x02; // Solo activa la salida AM
-while(1) { // Lazo infinito
-mostrar(); // Exhibe, segon el modo
-// Modo es una variable global
-if( ALARM == 1 && (PIND & 0x01) ) {
-ALARM = 0; // Apaga la alarma si esto encendida e
-PORTB = PORTB & 0b11110111;// inhabilitada
-}
-if( modo_presionado() ) {
-modo++;
-if( modo == 3 )
-GICR = 0B11000000; // Habilita INT1 e INT0
-else if( modo == 5 ) {
-if( AM_F_A == 1) {
-PORTB = PORTB & 0b11111011; // Ajusta AM y PM segon la
-PORTB = PORTB | 0b00000010;// bandera AM_F_A de la alarma
-}
-else {
-PORTB = PORTB & 0b11111101;
-PORTB = PORTB | 0b00000100;
-}
-}
-else if( modo == 7 ) {
-modo = 1;
-GICR = 0x00; // Inhabilita INT1 e INT0
-if( AM_F == 1) {
-PORTB = PORTB & 0b11111011; // Ajusta AM y PM segon la
-PORTB = PORTB | 0b00000010; // bandera AM_F de la hora actual
-}
-else {
-PORTB = PORTB & 0b11111101;
-PORTB = PORTB | 0b00000100;
-}
-}
-} // Cierre del if de modo presionado
-} // Cierre del lazo infinito
+   // Configuracion de entradas y salidas
+   DDRB = 0b00001111; // Salidas: AM, PM, Zumbador y 2 puntos
+   DDRC = 0xFF; // Salida a los 7 segmentos
+   DDRD = 0xF0; // Botones e interruptor y salidas a
+   
+   //transistores
+   PORTD = 0x0F; // Pull-Up en las entradas
+   
+   //Configuracion del temporizador 2
+   TCCR2 = 0x04; // Para que desborde cada medio segundo
+   TIMSK = 0x40; // Interrupcion por desbordamiento
+   ASSR = 0x08; // Se usa al oscilador externo
+   sei(); // Habilitador global de interrupciones
+   
+   // Configura interrupciones externas
+   MCUCR = 0B00001010; // INT1/INT0 por flanco de bajada (sin
+   // habilitar)
+   
+   // Estado inicial del sistema: variables, banderas y salidas
+   h_act = 12; m_act = 0; s_act = 0; // La hora actual inicia con 12:00
+   h_alrm = 12; m_alrm = 0; // La hora de la alarma es 12:00
+   modo = 1; // Modo normal, muestra la hora
+   AM_F = 1; AM_F_A = 1; // Antes del medio doa
+   ALARM = 0; CAMBIO = 0; // Alarma apagada
+   PORTB = 0x02; // Solo activa la salida AM
+
+   while(1) { // Lazo infinito
+      mostrar(); // Exhibe, segon el modo
+
+      // Modo es una variable global
+      if( ALARM == 1 && (PIND & 0x01) ) {
+         ALARM = 0; // Apaga la alarma si esto encendida e
+         PORTB = PORTB & 0b11110111;// inhabilitada
+      }
+      
+      if( modo_presionado() ) {
+         modo++;
+         if( modo == 3 )
+            GICR = 0B11000000; // Habilita INT1 e INT0
+         else if( modo == 5 ) {
+            if( AM_F_A == 1) {
+               PORTB = PORTB & 0b11111011; // Ajusta AM y PM segon la
+               PORTB = PORTB | 0b00000010;// bandera AM_F_A de la alarma
+            } else {
+               PORTB = PORTB & 0b11111101;
+               PORTB = PORTB | 0b00000100;
+            }
+         } else if( modo == 7 ) {
+            modo = 1;
+            GICR = 0x00; // Inhabilita INT1 e INT0
+            if( AM_F == 1) {
+               PORTB = PORTB & 0b11111011; // Ajusta AM y PM segon la
+               PORTB = PORTB | 0b00000010; // bandera AM_F de la hora actual
+            } else {
+               PORTB = PORTB & 0b11111101;
+               PORTB = PORTB | 0b00000100;
+            }
+         }
+      } // Cierre del if de modo presionado
+   } // Cierre del lazo infinito
 } // Fin de la funcion principal
 
 void mostrar() { // Funcion para el despliegue de datos
