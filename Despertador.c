@@ -134,45 +134,43 @@ void ubica() { // Ubica los datos a mostrar en un
 }
 
 ISR(TIMER2_OVF_vect) { // Se ejecuta cada medio segundo
-if( CAMBIO ) {
-CAMBIO = 0;
-s_act++; // Incrementa los segundos
-if( s_act == 60 ) { // Si son 60 incrementa los minutos
-s_act = 0;
-m_act++;
-if( ALARM ) {
-ALARM = 0; // Si la alarma esto activa, la apaga
-PORTB = PORTB & 0b11110111; // por ser otro minuto
-}
-if(m_act == 60) { // Si son 60 minutos incrementa las horas
-m_act = 0;
-h_act++;
-if( h_act == 13) // Con la hora 13 se regresa a 1
-h_act = 1;
-if( h_act == 12 ) { // Con la hora 12 se ajusta la
-bandera
-if( AM_F == 1 ) { // AM_F y las salidas AM y FM
-AM_F = 0;
-PORTB = PORTB & 0b11111101;
-PORTB = PORTB | 0b00000100;
-}
-else {
-AM_F = 1;
-PORTB = PORTB & 0b11111011;
-PORTB = PORTB | 0b00000010;
-}
-}
-}
-// En cada nuevo minuto tambion revisa si se debe activar la alarma
-if( !(PIND&0x01) && AM_F==AM_F_A && h_act==h_alrm && m_act==m_alrm ) {
-ALARM = 1;
-PORTB = PORTB | 0b00001000;
-}
-}
-}
-else // Modifica la bandera si no es el
-// segundo
-CAMBIO = 1; // completo
+   if( CAMBIO ) {
+      CAMBIO = 0;
+      s_act++; // Incrementa los segundos
+      if( s_act == 60 ) { // Si son 60 incrementa los minutos
+         s_act = 0;
+         m_act++;
+         if( ALARM ) {
+            ALARM = 0; // Si la alarma esto activa, la apaga
+            PORTB = PORTB & 0b11110111; // por ser otro minuto
+         }
+         if(m_act == 60) { // Si son 60 minutos incrementa las horas
+            m_act = 0;
+            h_act++;
+            if( h_act == 13) // Con la hora 13 se regresa a 1
+            h_act = 1;
+            if( h_act == 12 ) { // Con la hora 12 se ajusta la
+               bandera
+               if( AM_F == 1 ) { // AM_F y las salidas AM y FM
+                  AM_F = 0;
+                  PORTB = PORTB & 0b11111101;
+                  PORTB = PORTB | 0b00000100;
+               } else {
+                  AM_F = 1;
+                  PORTB = PORTB & 0b11111011;
+                  PORTB = PORTB | 0b00000010;
+               }
+            }
+         }
+         // En cada nuevo minuto tambion revisa si se debe activar la alarma
+         if( !(PIND&0x01) && AM_F==AM_F_A && h_act==h_alrm && m_act==m_alrm ) {
+            ALARM = 1;
+            PORTB = PORTB | 0b00001000;
+         }
+      }
+   } else // Modifica la bandera si no es el
+   // segundo
+   CAMBIO = 1; // completo
 }
 
 ISR(INT0_vect) { // Atiende al boton UP
