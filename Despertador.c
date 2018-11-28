@@ -73,67 +73,64 @@ void mostrar() { // Funcion para el despliegue de datos
 }
 
 void ubica() { // Ubica los datos a mostrar en un
-arreglo global
-switch(modo) { // Segon sea el modo
-case 1: Disp[3] = pgm_read_byte(&Sg7[h_act/10]);// Hora Actual
-Disp[2] = pgm_read_byte(&Sg7[h_act%10]);
-Disp[1] = pgm_read_byte(&Sg7[m_act/10]);
-Disp[0] = pgm_read_byte(&Sg7[m_act%10]);
-if( CAMBIO ) // Dos puntos parpadeando
-PORTB = PORTB | 0x01;
-else
-PORTB = PORTB & 0xFE;
-break;
-case 2: Disp[3] = 0xFF; // Segundos
-Disp[2] = 0xFF;
-Disp[1] = pgm_read_byte(&Sg7[s_act/10]);
-Disp[0] = pgm_read_byte(&Sg7[s_act%10]);
-break;
-case 3: if( CAMBIO ) { // Hora actual
-Disp[3] = pgm_read_byte(&Sg7[h_act/10]);// parpadeando
-Disp[2] = pgm_read_byte(&Sg7[h_act%10]);
-}
-else {
-Disp[3] = 0xFF;
-Disp[2] = 0xFF;
-}
-Disp[1] = pgm_read_byte(&Sg7[m_act/10]);// Minutos actuales
-Disp[0] = pgm_read_byte(&Sg7[m_act%10]); // normal
-break;
-case 4: Disp[3] = pgm_read_byte(&Sg7[h_act/10]); //Hora actual normal
-Disp[2] = pgm_read_byte(&Sg7[h_act%10]);
-if( CAMBIO ) { // Minutos actuales
-Disp[1] = pgm_read_byte(&Sg7[m_act/10]);// parpadeando
-Disp[0] = pgm_read_byte(&Sg7[m_act%10]);
-}
-else {
-Disp[1] = 0xFF;
-Disp[0] = 0xFF;
-}
-break;
-case 5: if( CAMBIO ) { // Hora de la alarma
-Disp[3] = pgm_read_byte(&Sg7[h_alrm/10]);//parpadeando
-Disp[2] = pgm_read_byte(&Sg7[h_alrm%10]);
-}
-else {
-Disp[3] = 0xFF;
-Disp[2] = 0xFF;
-}
-Disp[1] = pgm_read_byte(&Sg7[m_alrm/10]);// Minutos de la
-Disp[0] = pgm_read_byte(&Sg7[m_alrm%10]);// alarma normal
-break;
-case 6: Disp[3] = pgm_read_byte(&Sg7[h_alrm/10]);//Hora de la alarma
-Disp[2] = pgm_read_byte(&Sg7[h_alrm%10]); // normal
-if( CAMBIO ) {
-Disp[1] = pgm_read_byte(&Sg7[m_alrm/10]);//Minutos de la
-Disp[0] = pgm_read_byte(&Sg7[m_alrm%10]);//alarma parpadeando
-}
-else {
-Disp[1] = 0xFF;
-Disp[0] = 0xFF;
-}
-break;
-}
+   arreglo global
+   switch(modo) { // Segon sea el modo
+   case 1: Disp[3] = pgm_read_byte(&Sg7[h_act/10]);// Hora Actual
+           Disp[2] = pgm_read_byte(&Sg7[h_act%10]);
+           Disp[1] = pgm_read_byte(&Sg7[m_act/10]);
+           Disp[0] = pgm_read_byte(&Sg7[m_act%10]);
+           if( CAMBIO ) // Dos puntos parpadeando
+              PORTB = PORTB | 0x01;
+           else
+              PORTB = PORTB & 0xFE;
+   break;
+   case 2: Disp[3] = 0xFF; // Segundos
+           Disp[2] = 0xFF;
+           Disp[1] = pgm_read_byte(&Sg7[s_act/10]);
+           Disp[0] = pgm_read_byte(&Sg7[s_act%10]);
+   break;
+   case 3: if( CAMBIO ) { // Hora actual
+              Disp[3] = pgm_read_byte(&Sg7[h_act/10]);// parpadeando
+              Disp[2] = pgm_read_byte(&Sg7[h_act%10]);
+           } else {
+              Disp[3] = 0xFF;
+              Disp[2] = 0xFF;
+           }
+           Disp[1] = pgm_read_byte(&Sg7[m_act/10]);// Minutos actuales
+           Disp[0] = pgm_read_byte(&Sg7[m_act%10]); // normal
+   break;
+   case 4: Disp[3] = pgm_read_byte(&Sg7[h_act/10]); //Hora actual normal
+           Disp[2] = pgm_read_byte(&Sg7[h_act%10]);
+           if( CAMBIO ) { // Minutos actuales
+              Disp[1] = pgm_read_byte(&Sg7[m_act/10]);// parpadeando
+              Disp[0] = pgm_read_byte(&Sg7[m_act%10]);
+           } else {
+              Disp[1] = 0xFF;
+              Disp[0] = 0xFF;
+           }
+           break;
+   case 5: if( CAMBIO ) { // Hora de la alarma
+              Disp[3] = pgm_read_byte(&Sg7[h_alrm/10]);//parpadeando
+              Disp[2] = pgm_read_byte(&Sg7[h_alrm%10]);
+           }
+           else {
+              Disp[3] = 0xFF;
+              Disp[2] = 0xFF;
+           }
+           Disp[1] = pgm_read_byte(&Sg7[m_alrm/10]);// Minutos de la
+           Disp[0] = pgm_read_byte(&Sg7[m_alrm%10]);// alarma normal
+           break;
+   case 6: Disp[3] = pgm_read_byte(&Sg7[h_alrm/10]);//Hora de la alarma
+           Disp[2] = pgm_read_byte(&Sg7[h_alrm%10]); // normal
+           if( CAMBIO ) {
+              Disp[1] = pgm_read_byte(&Sg7[m_alrm/10]);//Minutos de la
+              Disp[0] = pgm_read_byte(&Sg7[m_alrm%10]);//alarma parpadeando
+           } else {
+              Disp[1] = 0xFF;
+              Disp[0] = 0xFF;
+           }
+   break;
+   }
 }
 
 ISR(TIMER2_OVF_vect) { // Se ejecuta cada medio segundo
