@@ -33,7 +33,7 @@ int main() {
          ALARM = 0; // Apaga la alarma si esto encendida e
          PORTB = PORTB & 0b11110111;// inhabilitada
       }
-      
+
       if( modo_presionado() ) {
          modo++;
          if( modo == 3 )
@@ -62,15 +62,16 @@ int main() {
 } // Fin de la funcion principal
 
 void mostrar() { // Funcion para el despliegue de datos
-unsigned char i;
-ubica(); // Coloca la informacion a mostrar
-for( i = 0; i < 4; i++) {
-PORTC = Disp[i]; // Envoa el dato al puerto
-PORTD = pgm_read_byte(&habs[i]); // Habilita para su despliegue
-_delay_ms(5); // Espera se vea adecuadamente
-PORTD = 0xFF; // Inhabilita para no introducir ruido
-} // en otro display
+   unsigned char i;
+   ubica(); // Coloca la informacion a mostrar
+   for( i = 0; i < 4; i++) {
+      PORTC = Disp[i]; // Envoa el dato al puerto
+      PORTD = pgm_read_byte(&habs[i]); // Habilita para su despliegue
+      _delay_ms(5); // Espera se vea adecuadamente
+      PORTD = 0xFF; // Inhabilita para no introducir ruido
+   } // en otro display
 }
+
 void ubica() { // Ubica los datos a mostrar en un
 arreglo global
 switch(modo) { // Segon sea el modo
@@ -134,6 +135,7 @@ Disp[0] = 0xFF;
 break;
 }
 }
+
 ISR(TIMER2_OVF_vect) { // Se ejecuta cada medio segundo
 if( CAMBIO ) {
 CAMBIO = 0;
@@ -175,6 +177,7 @@ else // Modifica la bandera si no es el
 // segundo
 CAMBIO = 1; // completo
 }
+
 ISR(INT0_vect) { // Atiende al boton UP
 switch( modo ) {
 case 3: h_act++; // Incrementa hora actual
