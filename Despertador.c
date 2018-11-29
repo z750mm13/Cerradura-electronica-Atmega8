@@ -1,3 +1,7 @@
+/** 
+ * Se omiten las declaraciones de variables globales
+ * y de bibliotecas de funciones.
+ */
 int main() {
    // Configuracion de entradas y salidas
    DDRB = 0b00001111; // Salidas: AM, PM, Zumbador y 2 puntos
@@ -214,4 +218,57 @@ switch( modo ) {
          m_alrm = 0;
    break;
    }
+}
+
+ISR(INT1_vect) { // Atiende al boton DOWN
+switch( modo ) {
+   case 3: h_act--; // Decrementa hora actual
+      if( h_act == 0 ) // De 0 pasa a 12
+         h_act = 12;
+      if( h_act == 12 ) { // En 12 ajusta bandera AM_F
+         if( AM_F ) { // y salidas AM y PM
+            AM_F = 0;
+            PORTB = PORTB & 0b11111101;
+            PORTB = PORTB | 0b00000100;
+         } else {
+            AM_F = 1;
+            PORTB = PORTB & 0b11111011;
+            PORTB = PORTB | 0b00000010;
+         }
+      }
+   break;
+   case 4: m_act--; // Decrementa minutos actuales
+      if( m_act == -1 ) // De -1 reinicia en 59
+         m_act = 59;
+      break;
+   case 5: h_alrm--; // Decrementa la hora de la alarma
+      if( h_alrm == 0 ) // De 0 pasa a 12
+         h_alrm = 12;
+      if( h_alrm == 12 ) { // En 12 ajusta bandera AM_F_A
+         if( AM_F_A ) { // y salidas AM y PM
+            AM_F_A = 0;
+            PORTB = PORTB & 0b11111101;
+            PORTB = PORTB | 0b00000100;
+         } else {
+            AM_F_A = 1;
+            PORTB = PORTB & 0b11111011;
+            PORTB = PORTB | 0b00000010;
+         }
+      }
+   break;
+   case 6: m_alrm--; // Incrementa minutos de la alarma
+      if( m_alrm == -1 ) // De 60 reinicia en 0
+         m_alrm = 59;
+   break;
+   }
+}
+
+unsigned char modo_presionado() {
+   if( !( PIND & 0x02 ) ) { // Si modo está presionado
+      for(int i = 0; i < 10; i++) // Espera realizando llamadas a mostrar
+      mostrar();
+   if( !( PIND & 0x02 ) ) // Si aún sigue presionado regresa
+      return 1; // verdadero
+   }
+   return 0; // Sino, regresa falso
 }
