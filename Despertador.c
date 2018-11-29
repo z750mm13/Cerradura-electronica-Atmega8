@@ -175,45 +175,43 @@ ISR(TIMER2_OVF_vect) { // Se ejecuta cada medio segundo
 
 ISR(INT0_vect) { // Atiende al boton UP
 switch( modo ) {
-case 3: h_act++; // Incrementa hora actual
-if( h_act == 13 ) // De 13 pasa a 1
-h_act = 1;
-if( h_act == 12 ) { // En 12 ajusta bandera AM_F
-if( AM_F ) { // y salidas AM y PM
-AM_F = 0;
-PORTB = PORTB & 0b11111101;
-PORTB = PORTB | 0b00000100;
-}
-else {
-AM_F = 1;
-PORTB = PORTB & 0b11111011;
-PORTB = PORTB | 0b00000010;
-}
-}
-break;
-case 4: m_act++; // Incrementa minutos actuales
-if( m_act == 60 ) // De 60 reinicia en 0
-m_act = 0;
-break;
-case 5: h_alrm++; // Incrementa la hora de la alarma
-if( h_alrm == 13 ) // De 13 pasa a 1
-h_alrm = 1;
-if( h_alrm == 12 ) { // En 12 ajusta bandera AM_F_A
-if( AM_F_A ) { // y salidas AM y PM
-AM_F_A = 0;
-PORTB = PORTB & 0b11111101;
-PORTB = PORTB | 0b00000100;
-}
-else {
-AM_F_A = 1;
-PORTB = PORTB & 0b11111011;
-PORTB = PORTB | 0b00000010;
-}
-}
-break;
-case 6: m_alrm++; // Incrementa minutos de la alarma
-if( m_alrm == 60 ) // De 60 reinicia en 0
-m_alrm = 0;
-break;
-}
+   case 3: h_act++; // Incrementa hora actual
+      if( h_act == 13 ) // De 13 pasa a 1
+         h_act = 1;
+      if( h_act == 12 ) { // En 12 ajusta bandera AM_F
+         if( AM_F ) { // y salidas AM y PM
+            AM_F = 0;
+            PORTB = PORTB & 0b11111101;
+            PORTB = PORTB | 0b00000100;
+         } else {
+            AM_F = 1;
+            PORTB = PORTB & 0b11111011;
+            PORTB = PORTB | 0b00000010;
+         }
+      }
+   break;
+   case 4: m_act++; // Incrementa minutos actuales
+      if( m_act == 60 ) // De 60 reinicia en 0
+         m_act = 0;
+      break;
+   case 5: h_alrm++; // Incrementa la hora de la alarma
+      if( h_alrm == 13 ) // De 13 pasa a 1
+         h_alrm = 1;
+      if( h_alrm == 12 ) { // En 12 ajusta bandera AM_F_A
+         if( AM_F_A ) { // y salidas AM y PM
+            AM_F_A = 0;
+            PORTB = PORTB & 0b11111101;
+            PORTB = PORTB | 0b00000100;
+         } else {
+            AM_F_A = 1;
+            PORTB = PORTB & 0b11111011;
+            PORTB = PORTB | 0b00000010;
+         }
+      }
+   break;
+   case 6: m_alrm++; // Incrementa minutos de la alarma
+      if( m_alrm == 60 ) // De 60 reinicia en 0
+         m_alrm = 0;
+   break;
+   }
 }
