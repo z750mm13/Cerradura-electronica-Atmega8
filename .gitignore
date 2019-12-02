@@ -5,3 +5,9 @@
 *.PWI
 *.DBK
 *.DMP
+*.RTE
+*.DO
+*.LBK
+*.LOG
+*.EDF
+*.STS
