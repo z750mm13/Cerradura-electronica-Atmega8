@@ -20,10 +20,10 @@ char teclado() {
 	unsigned char secuencia[] = {0xFE, 0xFD, 0xFB, 0xF7 };
 	unsigned char i, renglon, dato;
 	for(renglon = 0, i = 0; i < 4; i++) {
-		PORTB = secuencia[i]; // Ubica la salida
+		PORTD = secuencia[i]; // Ubica la salida
 		asm("nop"); // Espera que las seales se
 		// estabilicen
-		dato = PINB & 0xF0; // Lee la entrada (anula la
+		dato = PIND & 0xF0; // Lee la entrada (anula la
 		// parte baja)
 		if( dato != 0xF0 ) { // Si se presion una tecla
 			_delay_ms(200); // Evita rebotes
@@ -46,11 +46,13 @@ int main(void) // Programa Principal
 	unsigned char clave[4]; // Clave de la chapa, en SRAM
 	unsigned char clave_in[4]; // Clave de entrada
 	unsigned char CLAVE_LISTA, CAMBIO_CLAVE; // Banderas
+	
 	// Configuracion de los puertos
-	DDRB = 0x0F; // Entrada y salida, para el teclado
-	PORTB = 0xF0; // Resistores de Pull-Up en las entradas
+	DDRB = 0x0F; // Salidas para los LEDs de estado y el electroimn
 	DDRC = 0xFF; // Salida para el LCD
-	DDRD = 0x0F; // Salidas para los LEDs de estado y el electroimn
+	DDRD = 0x0F; // Entrada y salida, para el teclado
+	PORTD = 0xF0; // Resistores de Pull-Up en las entradas
+	
 	// Inicializa al LCD
 	LCD_reset();
 	// Obtiene la clave de EEPROM y la ubica en SRAM
@@ -64,7 +66,7 @@ int main(void) // Programa Principal
 	while( 1 ) { // Inicia el lazo infinito
 		// Estado inicial
 		TCCR1B = 0x00; // Temporizador 1 detenido
-		PORTD = 0x00; // Salidas apagadas
+		PORTB = 0x00; // Salidas apagadas
 		LCD_clear();
 		LCD_write_cad("Indique la Clave", 16); // Mensaje inicial
 		// Espera tecla numrica
@@ -77,7 +79,7 @@ int main(void) // Programa Principal
 		LCD_clear();
 		LCD_cursor(0x04); // Ubica al cursor e
 		LCD_write_data('*'); // imprime un asterisco
-		PORTD = 0x01; // Enciende LED naranja (hay actividad)
+		PORTB = 0x01; // Enciende LED naranja (hay actividad)
 		// Recibe la clave
 		TCNT1 = 0; // Asegura que el temporizador 1 est en 0
 		TCCR1B = 0x0A; // Arranca al temporizador 1
@@ -111,7 +113,7 @@ int main(void) // Programa Principal
 			// Compara la clave
 			if( clave[0]==clave_in[0] && clave[1]==clave_in[1] &&
 			clave[2]==clave_in[2] && clave[3]==clave_in[3] ){
-				PORTD = 0x0A; // Clave correcta: Abre la chapa
+				PORTB = 0x0A; // Clave correcta: Abre la chapa
 				LCD_clear(); // (LED verde y electroimn encendidos)
 				LCD_write_cad("<< Bienvenido >>", 16);
 				TCNT1 = 0; // Por un tiempo de 3 segundos muestra el
@@ -122,7 +124,7 @@ int main(void) // Programa Principal
 				do {
 					tecla = teclado();
 					if(tecla == 0x0B) { // Se solicit el Cambio de clave
-						PORTD = 0x02; // LED verde encendido
+						PORTB = 0x02; // LED verde encendido
 						LCD_clear();
 						LCD_write_cad("Cambio de Clave", 15);
 						CAMBIO_CLAVE = 1;
@@ -145,7 +147,7 @@ int main(void) // Programa Principal
 									//dgito se ubica
 									LCD_clear(); // al cursor
 									LCD_cursor(0x04);
-									PORTD = 0x01; // Enciende LED naranja
+									PORTB = 0x01; // Enciende LED naranja
 								} // (hay actividad)
 								LCD_write_data(tecla + 0x30); // Escribe al
 								// dgito
@@ -176,7 +178,7 @@ int main(void) // Programa Principal
 						// ha aceptado
 						tiempo = 6; // la nueva clave
 						FIN_TIEMPO = 0;
-						PORTD = 0x02; // con el LED verde encendido
+						PORTB = 0x02; // con el LED verde encendido
 						LCD_clear();
 						LCD_write_cad(" CLAVE ACEPTADA", 16);
 						while( !FIN_TIEMPO );
@@ -189,7 +191,7 @@ int main(void) // Programa Principal
 				TCCR1B = 0x0A; // de que la clave es incorrecta
 				tiempo = 6; // con el LED rojo encendido
 				FIN_TIEMPO = 0;
-				PORTD = 0x04;
+				PORTB = 0x04;
 				LCD_clear();
 				LCD_write_cad("CLAVE INCORRECTA", 16);
 				while( !FIN_TIEMPO );
