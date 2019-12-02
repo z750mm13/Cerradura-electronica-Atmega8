@@ -1,4 +1,4 @@
-#define F_CPU 1000000UL // El MCU opera a 1 MHz
+#define F_CPU 8000000UL // El MCU opera a 8 MHz
 #include "LCD.c" // Funciones del LCD
 #include <avr/io.h>
 #include <util/delay.h> // Para los retardos
