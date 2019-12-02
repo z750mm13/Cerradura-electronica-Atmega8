@@ -1,4 +1,4 @@
-#define  F_CPU 1000000UL
+#define  F_CPU 8000000UL
 #define  P_LCD  PORTC		// Puerto donde se conectar el LCD
 
 #include <util/delay.h>
