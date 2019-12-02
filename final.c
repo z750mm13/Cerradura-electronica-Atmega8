@@ -5,7 +5,7 @@
 #include <avr/interrupt.h> // Para el manejo de interrupciones
 #include <avr/eeprom.h> // Para la EEPROM
 
-EEMEM unsigned char clave_inicial[4] = { 1, 2, 3, 4}; // Arreglo de 4 bytes
+EEMEM unsigned char clave_inicial[4] = { 0, 1, 2, 3}; // Arreglo de 4 bytes
 
 volatile unsigned char tiempo; // Para los intervalos de tiempo
 volatile unsigned char FIN_TIEMPO;// Bandera de fin de periodo
@@ -65,7 +65,6 @@ int main(void) // Programa Principal
 	sei(); // Habilitador global de interrupciones
 	while( 1 ) { // Inicia el lazo infinito
 		// Estado inicial
-		TCCR1B = 0x00; // Temporizador 1 detenido
 		PORTB = 0x00; // Salidas apagadas
 		LCD_clear();
 		LCD_write_cad("Indique la Clave", 16); // Mensaje inicial
